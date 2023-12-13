@@ -1,0 +1,41 @@
+{% extends "nav.html" %}
+{% block title%}
+BodyBag
+{% endblock title%}
+{% block logo%}BodyBag{% endblock logo%}
+{% block from %}
+<h1 class="text-center">SignUp</h1>
+
+<div class="container col-lg-7 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+  {% for message in messages %}
+  <div class="container col-lg-7 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+      <strong></strong> {{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+<form class=" text-white py-0 px-2" action="/ecomauth/signup/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" class="form-control mb-2" id="email" name="email" aria-describedby="emailHelp" required>
+
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control mb-2" name="pass1" id="exampleInputPassword1" required>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword2">Confirm Password</label>
+      <input type="password" class="form-control" name="pass2" id="exampleInputPassword2" required>
+    </div>
+    <br>
+    <button type="submit" class="btn-get-started scrollto" >Sign In</button>
+    <br>
+    <p class="mb-2 pb-0">Already User?  <a href="/ecomauth/login/" class="about-btn scrollto">Login</a></p>
+       
+
+  </form>
+      
+</div>
+{%endblock from %}

@@ -44,7 +44,7 @@ h6 {
   bottom: 0;
   z-index: 9999;
   overflow: hidden;
-  background: #37517e;
+  background: #1b1b1b;
 }
 
 #preloader:before {
@@ -417,7 +417,7 @@ h6 {
   padding: 10px 28px 11px 28px;
   border-radius: 50px;
   transition: 0.5s;
-  margin: 10px 0 0 0;
+  /* margin: 10px 0 0 0; */
   color: #fff;
   background: #47b2e4;
 }
