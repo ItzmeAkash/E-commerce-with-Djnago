@@ -134,8 +134,8 @@ MESSAGE_TAGS = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_HOST='smtp.gmail.com'
-EMAIL_HOST_USER = 'bagbody672@gmail.com'
-EMAIL_HOST_PASSWORD = 'l@dyment0r'
+EMAIL_HOST_USER = 'itzmeakashps@gmail.com'
+EMAIL_HOST_PASSWORD = 'hsrg cfne plin awyl'
 EMAIL_PORT = 587
 EMAIL_USE_TLS=True
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
