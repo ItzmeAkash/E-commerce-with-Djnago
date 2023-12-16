@@ -8,13 +8,12 @@ BodyBag
 
 <div class="container col-lg-7 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
   {% for message in messages %}
-  <div class="container col-lg-7 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
     <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
       <strong></strong> {{message}}
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   {% endfor %}
-<form class=" text-white py-0 px-2" action="/ecomauth/signup/" method="post">
+<form class=" loginfrom text-white py-0 px-2" action="/ecomauth/signup/" method="post">
     {% csrf_token %}
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>

@@ -17,6 +17,9 @@ from django.http import HttpResponse
 from .utils import generate_token
 from .utils import TokenGenerator
 
+# restpassword generator
+
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 #emails
 from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
 from django.core.mail import BadHeaderError,send_mail
@@ -105,7 +108,7 @@ def activate(request, uidb64, token):
     if user is not None and generate_token.check_token(user,token):
         user.is_active=True
         user.save()
-        return HttpResponse('Thank you for your confirmation. Now you can login your account')
+        return HttpResponse('Thank you for your confirmation. Now you can login to your account')
     else:
         return HttpResponse('Activation link is invalid')
              
@@ -134,3 +137,73 @@ def handlelogout(request):
     logout(request)
     messages.success(request,"Logout Sucess")
     return redirect('/ecomauth/login/')
+
+
+class RequestResetEmail(View):
+    def get(self, request):
+        return render(request, 'auth/request-rest.html')
+    
+    def post(self, request):
+        email = request.POST['email']
+        user =  User.objects.filter(email=email)
+        
+        if user.exists():
+            current_site = get_current_site(request)
+            email_subject = '[Reset Your Password]'
+            message = render_to_string('auth/rest-user-password.html',
+                                       {
+                                           'domain': current_site.domain,
+                                           'uid':urlsafe_base64_encode(force_bytes(user[0].pk)),
+                                           'token':  PasswordResetTokenGenerator().make_token(user[0])
+                                       })
+            
+            email_message = EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[email])
+            
+            EmailThread(email_message).start()
+            
+            messages.info(request,"We have sent you an email for reset password")
+            return render(request,'auth/request-rest.html')
+        
+class SetNewPasswordView(View):
+    
+    def get(self,request, uidb64,token):
+        context = {
+            'uidb64':uidb64,
+            'token': token
+        }
+        try:
+            user_id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=user_id)
+            
+            if  not PasswordResetTokenGenerator().check_token(user,token):
+                messages.warning(request,"Password reset link is Invalid")
+                return render(request,'auth/request-rest.html',context)
+        except DjangoUnicodeDecodeError as identifier:
+            pass
+        
+        return render(request,'auth/set-new-password.html',context)
+    
+    def post(self, request,uidb64,token):
+        context = {
+            'uidb64': uidb64,
+            'token': token
+        }
+        password = request.POST['pass1']
+        confirm_password = request.POST['pass2']
+        if password!=confirm_password:
+            messages.warning(request,"Password is Not Matching")
+            return render(request, 'auth/set-new-password.html',context)
+        
+        try:
+            user_id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=user_id)
+            user.set_password(password)
+            user.save()
+            messages.success(request,"Password reset Sucees Please Login")
+            return redirect ('/ecomauth/login/')
+        
+        except DjangoUnicodeDecodeError as identifier:
+            messages.error(request," Something went wrong") 
+            return render (request,'auth/set-new-password.html',context)
+        return render (request,'auth/set-new-password.html',context)
+        

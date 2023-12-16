@@ -9,5 +9,7 @@ urlpatterns = [
     path('logout/',views.handlelogout, name='handlelogout'),
     # path('activate/<uidb64>/<token>',views.ActivateAccountView.as_view(),name='activate'),
     path('activate/(?<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',views.activate,name='activate'),
+    path('request-rest-email/',views.RequestResetEmail.as_view(),name='request-rest-email'),
+    path('set-new-password/(?<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',views.SetNewPasswordView.as_view(),name='set-new-password'),
     
 ]

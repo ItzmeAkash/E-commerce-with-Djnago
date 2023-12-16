@@ -1,0 +1,33 @@
+{% extends "nav.html" %}
+    {% block title%}
+    BodyBag Reset Password
+    {% endblock title%}
+    {% block logo%}BodyBag{% endblock logo%}
+    {% block from %}
+    
+    <h1 class="text-center">Request a Reset Link</h1>
+    <div class="container col-lg-7 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+      {% for message in messages %}
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+          <strong></strong> {{message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    
+    <form class=" text-white py-0 px-2" action="/ecomauth/request-rest-email/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" class="form-control mb-2" id="email" name="email" aria-describedby="emailHelp" required>
+    
+        </div>
+        <br>
+        <button type="submit" class="btn-get-started scrollto" >Submit</button>
+        <br>
+        <p class="mb-2 pb-0">GO back?  <a href="/ecomauth/login/" class="about-btn scrollto">login</a>
+       
+    
+      </form>
+          
+    </div>
+    {%endblock from %}

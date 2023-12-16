@@ -139,3 +139,10 @@ EMAIL_HOST_PASSWORD = 'hsrg cfne plin awyl'
 EMAIL_PORT = 587
 EMAIL_USE_TLS=True
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+
+
+#uploading image  --> Install pillow
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
