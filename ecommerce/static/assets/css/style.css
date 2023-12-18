@@ -116,7 +116,7 @@ h6 {
 
 #header.header-scrolled,
 #header.header-inner-pages {
-  background: rgba(72, 73, 73, 0.9);
+  background: rgba(0, 0, 0, 0.9);;
 }
 
 #header .logo {
@@ -515,6 +515,19 @@ h6 {
   }
 }
 
+/*--------------------------------------------------------------
+# Product Section
+--------------------------------------------------------------*/
+.btn{
+  background-color: black;
+  border: none; 
+
+}
+
+.btn:hover{
+
+  background-color: #5e5d5d;
+}
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
