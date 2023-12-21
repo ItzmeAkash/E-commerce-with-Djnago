@@ -35,6 +35,7 @@
 <body>
 
   <!-- ======= Header ======= -->
+  
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
 
@@ -44,31 +45,34 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="#services">Services</a></li>
-          <li><a class="nav-link   scrollto" href="#portfolio">Portfolio</a></li>
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
-            </ul>
-          </li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
-          <li><a class="nav-link scrollto" href="/ecomauth/logout/">Logout</a></li>
+          <li><a class="nav-link scrollto active" href="/">Home</a></li>
+          <li><a class="nav-link scrollto active" href="/purchase">Purchase</a></li>
+          <li><a class="nav-link scrollto" href="/about">About</a></li>
+          <li><a class="nav-link scrollto" href="/services">Contact</a></li>
+          <li><a class="nav-link scrollto" href="Order">Order</a></li>
+          <li><a class="nav-link scrollto" href="Order">Tracker</a></li>
+
+          {% if request.user.is_authenticated %}
+
+          <button type = "button" class ="btn btn-success" id="popcart"
+          data-container = "body" data-toggle = "popover" data-placement="bottom"
+          data-html = "true" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
            
+          Cart(<span id="cart">0</span>)
+        </button>
+
+          <li>
+            <a class="getstarted scrollto">Welcome {{user.username}}</a>
+          </li>
+          <li>
+            <a class="nav-link scrollto" href="/ecomauth/logout/">Logout</a>
+          </li>
+
+          {% else %}
+          <li>
+            <a class="nav-link scrollto" href="/ecomauth/login/">Login</a>
+          </li>
+          {% endif %}
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -77,7 +81,7 @@
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex align-items-center bg-black">
+  <section>
 
     <div class="container">
       <div class="row">
@@ -98,7 +102,10 @@
 
   <main id="main">
 
-  
+{% block body%}
+
+{% endblock body%} 
+
 
     
 
@@ -202,6 +209,9 @@
 
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
+  {% block script %}
+
+  {% endblock script %}
 
 </body>
 

@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from . models import Product
 from math import ceil
-
+from ecomapp import key
 # Create your views here.
 def home(request):
+    return render(request,'index.html')
+
+def Purchase(request):
     current_user = request.user
     print(current_user)
     allProds = []
@@ -17,4 +20,6 @@ def home(request):
         
         
     params = {'allProds': allProds}
-    return render(request,'index.html', params)
+    return render(request,'purchase.html', params)
+
+

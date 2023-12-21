@@ -29,7 +29,6 @@ from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 #threading
 import threading
-
 class EmailThread(threading.Thread):
     def __init__(self, email_message):
         self.email_message = email_message

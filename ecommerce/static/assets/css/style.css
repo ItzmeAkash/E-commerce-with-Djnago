@@ -528,6 +528,15 @@ h6 {
 
   background-color: #5e5d5d;
 }
+
+
+#popcart{
+  background: None;
+}
+
+#popcart:hover{
+  color: grey;
+}
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
