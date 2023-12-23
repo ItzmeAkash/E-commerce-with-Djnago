@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.conf import settings
 from django.contrib import messages
+from django.http import HttpResponse
 
 MERCHANT_KEY = key.MKEY
 # Create your views here.
@@ -29,6 +30,32 @@ def Purchase(request):
         
     params = {'allProds': allProds}
     return render(request,'purchase.html', params)
+
+
+
+def tracker(request):
+    if not request.user.is_authenticated:
+        messages.warning(request,"Login & Try Again")
+        return redirect('/ecomauth/login')
+    if request.method=="POST":
+        orderId = request.POST.get('orderId', '')
+        email = request.POST.get('email', '')
+        try:
+            order = Orders.objects.filter(order_id=orderId, email=email)
+            if len(order)>0:
+                update = OrderUpdate.objects.filter(order_id=orderId)
+                updates = []
+                for item in update:
+                    updates.append({'text': item.update_desc, 'time': item.timestamp})
+                    response = json.dumps([updates, order[0].items_json], default=str)
+                return HttpResponse(response)
+            else:
+                return HttpResponse('{}')
+        except Exception as e:
+            return HttpResponse('{}')
+
+    return render(request, 'tracker.html')
+
 
 def checkout(request):
     if not request.user.is_authenticated:
@@ -113,5 +140,5 @@ def handlerequest(request):
     return render(request, 'paymentstatus.html', {'response': response_dict})
 
                 
-    
+
  

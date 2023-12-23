@@ -7,4 +7,6 @@ urlpatterns = [
     path('purchase',views.Purchase, name = "purchase"),
     path('checkout/',views.checkout, name = "checkout"),
     path('handlerequest/',views.handlerequest, name="HandleRequest"),
+    path('tracker', views.tracker, name="TrackingStatus"),
+    
 ]
