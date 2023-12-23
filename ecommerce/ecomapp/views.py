@@ -3,6 +3,13 @@ from . models import Product,Orders,OrderUpdate
 from math import ceil
 from ecomapp import key
 from django.contrib import messages
+from paytm import Checksum
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.conf import settings
+from django.contrib import messages
+
+MERCHANT_KEY = key.MKEY
 # Create your views here.
 def home(request):
     return render(request,'index.html')
@@ -30,7 +37,7 @@ def checkout(request):
     
     if request.method=="POST":
         
-        itemn_json = request.POST.get('itemsJson','')
+        item_json = request.POST.get('itemsJson','')
         name = request.POST.get('name','')
         amount = request.POST.get('amt')
         email = request.POST.get('email','')
@@ -42,7 +49,7 @@ def checkout(request):
         phone = request.POST.get('phone','') 
         
         
-        order = Orders(itemn_json=itemn_json, name=name, amount=amount,email=email,address1=address1,address2=address2,
+        order = Orders(item_json=item_json, name=name, amount=amount,email=email,address1=address1,address2=address2,
                        city=city,state=state,zip_code=zip_code,
                        phone=phone) 
         print(amount)
@@ -55,8 +62,56 @@ def checkout(request):
         id = order.order_id
         oid = str(id)+"bodybag"
         param_dict = {
-            'MID': 'MID',
-            'ORDER'
+            'MID': key.MID,
+            'ORDER_ID':oid,
+            'TXN_AMOUNT': str(amount),
+            'CUST_ID': email,
+            'INDUSTRY_TYPE_ID': 'Retail',
+            'WEBSITE': 'WEBSTAGING',
+            'CHANNEL_ID':'WEB',
+            'CALLBACK_URL': 'http://127.0.0.1:8000/handlerrequest/'
             
         }
-    return render(request, 'checkout.html')   
+        param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(
+            param_dict,MERCHANT_KEY
+        )
+        return render(request, 'paytm.html', {'param_dict': param_dict})
+        
+    return render(request, 'checkout.html')  
+
+@csrf_exempt
+def handlerequest(request):
+    # paytm will send you post request here
+    form = request.POST
+    response_dict = {}
+    for i in form.keys():
+        response_dict[i] = form[i]
+        if i == 'CHECKSUMHASH':
+            checksum = form[i]
+    verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY,checksum)
+    if verify:
+        if response_dict['RESPCODE'] == '01':
+            print('Order successful')
+            a = response_dict['ORDERID']
+            b = response_dict['TXNAMOUNT']
+            rid = a.replace('bodybag','')
+            
+            print(rid)
+            filter2 = Orders.objects.filter(order_id=rid)
+            print(filter2)
+            print(a,b)
+            for post1 in filter2:
+                
+                post1.oid =a
+                post1.amountpaid=b
+                post1.paymentstatus="PAID"
+                post1.save()
+            print("run aged function")
+            
+        else:
+            print('Order was not successful because '+ response_dict['RESPMSG'])
+    return render(request, 'paymentstatus.html', {'response': response_dict})
+
+                
+    
+ 
